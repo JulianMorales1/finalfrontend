@@ -39,9 +39,11 @@ export const loginUser = async (username, password) => {
     const responseJSON = await response.json();
     if (responseJSON.success) {
         localStorage.setItem(process.env.REACT_APP_TOKEN_HEADER_KEY, JSON.stringify(responseJSON.token));
+        return true
     }
     if (!responseJSON.success) {
         console.log("Login user was not successful. Received responseJSON: ", responseJSON)
+        return false
     }
 
 }

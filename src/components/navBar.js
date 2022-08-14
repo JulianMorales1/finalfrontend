@@ -30,6 +30,9 @@ const NavBar = (props) => {
                 </ul>
                 {userToken && (
                     <>
+                        <li>
+                            <Link to="/todos">Todos</Link>
+                        </li>
                         <span>
                             <strong>You Are Logged In</strong>
                         </span>

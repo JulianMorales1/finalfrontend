@@ -1,9 +1,10 @@
 import React, { useState, useEffect, useRef } from "react";
+import { v4 as uuid } from 'uuid';
 
 
 function ToDoForm(props) {
 
-    const [input, setInput] = useState('')
+    const [input, setInput] = useState(props.edit ? props.edit.value : '')
 
     const inputRef = useRef(null)
 
@@ -20,10 +21,16 @@ function ToDoForm(props) {
     const handleSubmit = e => {
         e.preventDefault();
 
-        props.onSubmit({
-            uid: uuid(),
-            text: input
-        });
+        if (props.edit) {
+            props.onUpdate(props.edit.id, input)
+        }
+        else {
+            props.onSubmit({
+
+                title: input
+            });
+        }
+
 
         setInput('');
     };
@@ -31,15 +38,32 @@ function ToDoForm(props) {
     return (
 
         <form className="todo-form" onSubmit={handleSubmit}>
-            <input
-                type="text"
-                placeholder="Add a to do"
-                value={input} name="text"
-                className='todo-input'
-                onChange={handleChange}
-                ref={inputRef}
-            />
-            <button className="todo-button">Add a to do</button>
+            {props.edit && (
+                <>
+                    <input
+                        type="text"
+                        placeholder="Add a to do"
+                        value={input} name="text"
+                        className='todo-input'
+                        onChange={handleChange}
+                        ref={inputRef}
+                    />
+                    <button className="todo-button">Update Todo</button>
+                </>
+            )}
+            {!props.edit && (
+                <>
+                    <input
+                        type="text"
+                        placeholder="Add a to do"
+                        value={input} name="text"
+                        className='todo-input'
+                        onChange={handleChange}
+                        ref={inputRef}
+                    />
+                    <button className="todo-button">Add a to do</button>
+                </>
+            )}
         </form>
 
     )

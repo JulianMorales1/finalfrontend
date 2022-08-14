@@ -14,7 +14,9 @@ const LoginPage = (props) => {
                 props.setIsAuthLoading(true)
                 const loginResult = await loginUser(userName, password)
 
+
                 if (loginResult === true) {
+
                     props.setIsAuthLoading(false)
                     navigate('/')
                 }

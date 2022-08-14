@@ -1,31 +1,76 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import ToDoForm from "./toDoForm";
+import Todo from "./toDo";
+import { getTodos, deleteTodo, updateTodo, createTodo } from '../todo.js'
 
 
 function ToDoList() {
 
-    const [toDos, setToDos] = useState([])
+    const [todos, setToDos] = useState([])
+    const [inEdit, setInEdit] = useState(false)
+    const [edit, setEdit] = useState({
+        id: null, //sets to null??
+        value: ''
+    });
 
-    const addToDo = todo => {
-        if (!todo.text || /^\s*$/.test(todo.text)) {
-            return
-        }
-        const newTodos = [todo, ...todos]
+    const addToDo = async (todo) => {
+        // if (!todo.text || /^\s*$/.test(todo.text)) {
+        //     return
+        // }
+        // const newTodos = [todo, ...todos]
 
-        setTodos(newTodos);
+        await createTodo(todo.title);
+
+        const data = await getTodos();
+
+        setToDos(data);
     };
-    const removeTodo = id => {
-        const removeArr = [...todos].filter(todo => todo.id !== id)
-
+    const removeTodo = async (id) => {
+        const removeArr = [...todos].filter(todo => todo._id !== id)
+        await deleteTodo(id)
         setToDos(removeArr);
     }
 
-    const updateTodo = (todo, newValue) => {
-        if (!newValue.text || /^\s*$/.test(newValue.text)) {
-            return
-        }
-        setTodos(prev => prev.map(item => (item.id === todoId ? newValue : item))
-        );
+
+    const startEditTodo = (todo, text) => {
+
+        setEdit({
+            id: todo.todo._id,
+            value: todo.todo.title
+        })
+        setInEdit(true)
+    }
+    // const updateTodo = async (id, newValue) => {
+
+
+    //     // if (!newValue || /^\s*$/.test(newValue)) {
+    //     //     return
+    //     // }
+
+
+    //     // let updatedTodos = todos.map(todo => {
+    //     //     if (todo._id === id) {
+    //     //         todo.title = newValue
+    //     //     }
+    //     //     return todo
+    //     // })
+    //     //setToDos(updatedTodos);
+    //     console.log(id, newValue)
+    //     await updateTodo(id, newValue)
+
+
+    //     setInEdit(false)
+    // }
+
+    const onUpdate = async (id, newValue) => {
+        console.log(id, newValue)
+        await updateTodo(id, newValue)
+
+
+        setInEdit(false)
+
+        const data = await getTodos();
+        setToDos(data)
     }
 
     const completeToDo = id => {
@@ -35,17 +80,30 @@ function ToDoList() {
             }
             return todo
         })
-        setTodos(updatedTodos);
+        setToDos(updatedTodos);
     }
+
+    useEffect(() => {
+
+        (async () => {
+
+            const data = await getTodos();
+            setToDos(data)
+        })();
+
+    }, [])
     return (
         <div>
             <h1> To Do List</h1>
             <ToDoForm onSubmit={addToDo} />
-            <ToDo
+            {inEdit && <ToDoForm onSubmit={updateTodo} edit={edit} onUpdate={onUpdate} />}
+            <Todo
                 todos={todos}
                 completeToDo={completeToDo}
                 removeTodo={removeTodo}
-                updateTodo={updateTodo} />
+                updateTodo={onUpdate}
+                startEditTodo={startEditTodo}
+            />
         </div>
     )
 }

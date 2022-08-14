@@ -2,14 +2,18 @@ import React, { useState } from "react";
 import ToDoForm from "./toDoForm";
 import ToDoList from "./toDoList";
 import { RiCloseCircleLine } from 'react-icons/ri'
-import { TiEdit } from 'react-icons/ri'
+//import { AiFillEdit } from 'react-icons'
 
-function Todo({ todos, completeTodo, removeTodo, updateTodo }) {
+import { FaEdit } from "@react-icons/all-files/fa/FaEdit";
+
+function Todo({ todos, completeTodo, removeTodo, updateTodo, startEditTodo }) {
 
     const [edit, setEdit] = useState({
         id: null, //sets to null??
         value: ''
     });
+
+    const [inEdit, setInEdit] = useState(false)
 
     const submitUpdate = value => {
         updateTodo(edit.id, value)
@@ -19,27 +23,45 @@ function Todo({ todos, completeTodo, removeTodo, updateTodo }) {
         })
     }
 
-    if (edit.id) {
-        return <ToDoForm edit={edit} onSubmit={submitUpdate} />;
+
+    const editTodo = (todo, text) => {
+        //console.log('working')
+
+
+        startEditTodo(todo, text);
+
+
     }
 
-    return ToDoList.map((todo, index) => (
-        <div className={todo.isComplete ? 'todo-row complete' :
-            'todo-row'} key={index}>
+    return (
+        <div>
+            {todos.length > 0 && todos.map((todo, index) => {
+                return (
+                    <div className={todo.isComplete ? 'todo-row complete' :
+                        'todo-row'} key={index}>
 
-            <div key={todo.id} onClick={() => completeTodo(todo.id)}>
-                {todo.text}
-            </div>
-            <div className="icons">
-                <RiCloseCircleLine
-                    onClick={() => removeTodo(todo.id)}
-                    className='delete-icon' />
-                <TiEdit
-                    onClick={() => editTodo({ id: todo.id, value: todo.text })}
-                    className='edit-icon' />
-            </div>
+                        <div key={todo.id} onClick={() => completeTodo(todo._id)}>
+                            {todo.title}
+                        </div>
+
+                        <div className="icons">
+                            <RiCloseCircleLine
+                                onClick={() => removeTodo(todo._id)}
+                                className='delete-icon' />
+                            <FaEdit
+                                onClick={() => editTodo({ todo: todo, value: todo.title })}
+                                className='edit-icon' />
+
+                        </div>
+                    </div>
+                )
+            })}
+
+
+
+            {todos.length == 0 && <div>No Todos found</div>}
         </div>
-    ))
+    )
 }
 
 export default Todo

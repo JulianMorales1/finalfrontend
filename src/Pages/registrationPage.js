@@ -15,10 +15,13 @@ const RegistrationPage = (props) => {
                 props.setIsAuthLoading(true)
                 const registerResult = await registerUser(userName, password)
 
+                console.log('1')
                 if (registerResult === true) {
+                    navigate('/login')
                     const loginResult = await loginUser(userName, password)
 
                     if (loginResult === true) {
+                        console.log('3')
                         props.setIsAuthLoading(false)
                         navigate('/')
                     }
