@@ -1,13 +1,16 @@
 const urlEndpoint = process.env.REACT_APP_URL_ENDPOINT;
 
-export const registerUser = async (username, password) => {
+export const registerUser = async (username, password, admin) => {
     const url = `${urlEndpoint}/auth/register-user`;
 
+    //console.log(admin)
+    console.log(admin)
     const response = await fetch(url, {
         method: 'POST',
         body: JSON.stringify({
             username,
-            password
+            password,
+            admin
         }),
         headers: {
             'Content-Type': 'application/json'
@@ -36,9 +39,14 @@ export const loginUser = async (username, password) => {
         }
 
     });
+    // alert('hi ther')
     const responseJSON = await response.json();
+    console.log(responseJSON)
     if (responseJSON.success) {
+
         localStorage.setItem(process.env.REACT_APP_TOKEN_HEADER_KEY, JSON.stringify(responseJSON.token));
+        localStorage.setItem('userid', responseJSON.userid);
+        localStorage.setItem('user', JSON.stringify(responseJSON.user))
         return true
     }
     if (!responseJSON.success) {
@@ -48,6 +56,6 @@ export const loginUser = async (username, password) => {
 
 }
 
-export const logoutUser = () => { localStorage.removeItem(process.env.REACT_APP_TOKEN_HEADER_KEY) }
+export const logoutUser = () => { localStorage.removeItem(process.env.REACT_APP_TOKEN_HEADER_KEY); localStorage.removeItem('userid') }
 
 export const getUserToken = () => { return JSON.parse(localStorage.getItem(process.env.REACT_APP_TOKEN_HEADER_KEY)) }

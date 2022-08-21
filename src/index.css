@@ -11,3 +11,31 @@ code {
   font-family: source-code-pro, Menlo, Monaco, Consolas, 'Courier New',
     monospace;
 }
+
+
+
+/* //// todo css here */
+
+.todo-row{
+  cursor: pointer;
+}
+.complete{
+  text-decoration: line-through;
+}
+
+input,textarea{
+  display: block;
+}
+
+
+.input-group{
+
+  margin-top: 5px;
+  margin-bottom: 5px;
+  display: flex;
+  align-items: center;
+  /* justify-content: space-between; */
+}
+.input-group label{
+  display: block;
+}

@@ -21,7 +21,7 @@ const LoginPage = (props) => {
                     navigate('/')
                 }
 
-            }}></button>
+            }}>Submit</button>
         </div>
     )
 }

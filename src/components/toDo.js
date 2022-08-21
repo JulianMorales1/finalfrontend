@@ -6,7 +6,7 @@ import { RiCloseCircleLine } from 'react-icons/ri'
 
 import { FaEdit } from "@react-icons/all-files/fa/FaEdit";
 
-function Todo({ todos, completeTodo, removeTodo, updateTodo, startEditTodo }) {
+function Todo({ todos, completeToDo, removeTodo, updateTodo, startEditTodo }) {
 
     const [edit, setEdit] = useState({
         id: null, //sets to null??
@@ -33,15 +33,32 @@ function Todo({ todos, completeTodo, removeTodo, updateTodo, startEditTodo }) {
 
     }
 
+    const compTodo = (e) => {
+
+        //alert(e.target.id)
+        completeToDo(e.target.id)
+    }
+
+
     return (
         <div>
+
             {todos.length > 0 && todos.map((todo, index) => {
                 return (
-                    <div className={todo.isComplete ? 'todo-row complete' :
+                    <div className={todo.completed ? 'todo-row complete' :
                         'todo-row'} key={index}>
 
-                        <div key={todo.id} onClick={() => completeTodo(todo._id)}>
+                        <div key={todo._id} id={todo._id} onClick={compTodo}>
                             {todo.title}
+                        </div>
+
+
+                        <p>{todo.desc}</p>
+                        <div>
+                            {todo.startDate}
+                        </div>
+                        <div>
+                            {todo.endDate}
                         </div>
 
                         <div className="icons">

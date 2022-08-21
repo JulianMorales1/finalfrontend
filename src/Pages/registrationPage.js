@@ -6,14 +6,20 @@ import { useNavigate } from 'react-router-dom';
 const RegistrationPage = (props) => {
     const [userName, setUserName] = useState();
     const [password, setPassword] = useState();
+    const [admin, setAdmin] = useState(false)
     const navigate = useNavigate()
     return (
         <div><h1>Registration Page</h1>
             <input type='text' onChange={(event) => setUserName(event.target.value)}></input>
             <input type='text' onChange={(event) => setPassword(event.target.value)}></input>
+
+
+            <div className='input-group'>
+                <input type='checkbox' checked={admin} onChange={() => setAdmin(!admin)} /><label>is Admin?</label>
+            </div>
             <button onClick={async () => {
                 props.setIsAuthLoading(true)
-                const registerResult = await registerUser(userName, password)
+                const registerResult = await registerUser(userName, password, admin)
 
                 console.log('1')
                 if (registerResult === true) {
@@ -28,7 +34,7 @@ const RegistrationPage = (props) => {
                 }
 
 
-            }}></button>
+            }}>Submit</button>
 
 
         </div>
